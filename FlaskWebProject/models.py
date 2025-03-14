@@ -60,9 +60,15 @@ class Post(db.Model):
             Randomfilename = id_generator();
             filename = Randomfilename + '.' + fileextension;
             try:
-                blob_service.create_blob_from_stream(blob_container, filename, file)
+                #blob_service.create_blob_from_stream(blob_container, filename, file)
+                #new
+                blob_client = blob_service.get_blob_client(container=blob_container, blob=filename)
+                blob_client.upload_blob(file)
                 if(self.image_path):
-                    blob_service.delete_blob(blob_container, self.image_path)
+                    #blob_service.delete_blob(blob_container, self.image_path)
+                    #new
+                    blob_client = blob_service.get_blob_client(container=blob_container, blob=filename)
+                    blob_client.delete_blob()
             except Exception:
                 flash(Exception)
             self.image_path =  filename
