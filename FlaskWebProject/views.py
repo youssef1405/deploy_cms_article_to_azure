@@ -69,11 +69,12 @@ def login():
             flash('Invalid username or password')
             app.logger.info('Unsuccessful user login attempt!')
             return redirect(url_for('login'))
-        app.logger.info('Successfully logged in!')
+       
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlparse(next_page).netloc != '':
             next_page = url_for('home')
+            app.logger.info('Successfully logged in!')
         return redirect(next_page)
     session["state"] = str(uuid.uuid4())
     auth_url = _build_auth_url(scopes=Config.SCOPE, state=session["state"])
